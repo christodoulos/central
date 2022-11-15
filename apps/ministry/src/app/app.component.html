@@ -1,1 +1,32 @@
-<central-nx-welcome></central-nx-welcome>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button
+      mat-icon-button
+      *ngIf="sidenav.mode === 'over'"
+      (click)="sidenav.toggle()"
+    >
+      <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+      <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+    </button>
+    Ministry of Internal Affairs
+    <span class="spacer"></span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <!-- left sidenav -->
+  <mat-sidenav #left #sidenav="matSidenav" class="content" position="start">
+    <mat-nav-list>
+      <h4 matSubheader>Navigation</h4>
+      <a mat-list-item>Link 1</a>
+      <a mat-list-item>Link 2</a>
+      <a mat-list-item> Link 3</a>
+    </mat-nav-list>
+    <mat-divider></mat-divider>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
