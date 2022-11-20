@@ -9,13 +9,17 @@ import { MaterialModule } from '@central/material';
 import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
 
+import { AgGridModule } from 'ag-grid-angular';
+import { OrganizationsComponent } from './organizations/organizations.component';
+
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent],
+  declarations: [AppComponent, NxWelcomeComponent, OrganizationsComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([{ path: '', component: NxWelcomeComponent }]),
     MaterialModule,
+    AgGridModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
