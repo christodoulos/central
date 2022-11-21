@@ -17,7 +17,10 @@ import { OrganizationsComponent } from './organizations/organizations.component'
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot([{ path: '', component: NxWelcomeComponent }]),
+    RouterModule.forRoot([
+      { path: '', component: NxWelcomeComponent },
+      { path: 'organizations', component: OrganizationsComponent },
+    ]),
     MaterialModule,
     AgGridModule,
   ],
