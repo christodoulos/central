@@ -5,8 +5,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-
 import { join } from 'path';
+
+import { OrganizationsModule } from './organizations/organizations.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { join } from 'path';
       exclude: ['/api*'],
     }),
     MongooseModule.forRoot(process.env.MINISTRY_URI),
+    OrganizationsModule
   ],
   controllers: [AppController],
   providers: [AppService],
