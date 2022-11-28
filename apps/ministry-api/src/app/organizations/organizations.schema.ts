@@ -7,6 +7,9 @@ export type Organization = typeof OrganizationSchema;
 
 export const OrganizationSchema = new mongoose.Schema(
   {
+    // "id": {
+    //   "type":"ObjectId"
+    // },
     "code": {
       "type": "String"
     },
@@ -69,5 +72,14 @@ export const OrganizationSchema = new mongoose.Schema(
       "type": "Number"
     }
   },
-  { collection: 'organizations' }
+  { 
+    id: true,
+    toJSON: {
+      transform(doc, ret){
+        ret.id = ret._id
+        delete ret._id
+      }
+    },
+    collection: 'organizations' 
+  }
 );

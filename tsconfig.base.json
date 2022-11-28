@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@central/auth": ["libs/auth/src/index.ts"],
+      "@central/interfaces": ["libs/interfaces/src/index.ts"],
       "@central/material": ["libs/material/src/index.ts"],
       "@central/users": ["libs/users/src/index.ts"]
     }

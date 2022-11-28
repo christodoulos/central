@@ -8,8 +8,15 @@
       <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
       <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
     </button>
-    Ministry of Internal Affairs
+    Υπουργείο Εσωτερικών
     <span class="spacer"></span>
+    <button mat-icon-button 
+            class="example-icon favorite-icon" 
+            matTooltip="Είσοδος"
+            matTooltipPosition="left"
+            aria-label="Button for login">
+      <mat-icon>login</mat-icon>
+    </button>
   </mat-toolbar-row>
 </mat-toolbar>
 
@@ -17,10 +24,10 @@
   <!-- left sidenav -->
   <mat-sidenav #left #sidenav="matSidenav" class="content" position="start">
     <mat-nav-list>
-      <h4 matSubheader>Navigation</h4>
-      <a mat-list-item>Link 1</a>
-      <a mat-list-item>Link 2</a>
-      <a mat-list-item> Link 3</a>
+      <h4 matSubheader>Μενού επιλογών</h4>
+      <a mat-list-item href="/"><mat-icon>home</mat-icon> Αρχική</a>
+      <a mat-list-item href="/organizations">Φορείς</a>
+      <a mat-list-item href="/organization-units">Μονάδες</a>
     </mat-nav-list>
     <mat-divider></mat-divider>
   </mat-sidenav>
