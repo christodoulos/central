@@ -14,11 +14,11 @@ export class OrganizationsComponent implements OnInit {
 
   public rowData$!: Observable<Organization[]>; 
   
-  colDefs: ColDef[] = [
-    { headerName:'Κωδικός', field:'code', sortable:true, filter:true, suppressSizeToFit:true, resizable:true },
-    { headerName:'Φορέας', field:'preferredLabel', sortable:true, filter:true, suppressSizeToFit:true, resizable:true },
-    { headerName:'Εποπτεύοντας φορέας', field:'subOrganizationOf.preferredLabel', sortable:true, filter:true, suppressSizeToFit:true, resizable:true},
-    { headerName:'Τύπος φορέα', field:'organizationType.description', sortable:true, filter:true, suppressSizeToFit:true, resizable:true},
+  public colDefs: ColDef[] = [
+    { headerName:'Κωδικός', field:'code' },
+    { headerName:'Φορέας', field:'preferredLabel' },
+    { headerName:'Εποπτεύοντας φορέας', field:'subOrganizationOf.preferredLabel' },
+    { headerName:'Τύπος φορέα', field:'organizationType.description' },
     { headerName:'Λειτουργία', field:'purpose',  
         valueGetter: params => {
           if (params.data.purpose) {
@@ -31,12 +31,20 @@ export class OrganizationsComponent implements OnInit {
           } else {
             return undefined;
           } 
-        }, sortable:true, filter:true, suppressSizeToFit:true, resizable:true },
-    { headerName:'Περιγραφή', field:'description', sortable:true, filter:true, suppressSizeToFit:true, resizable:true},
-    { headerName:'ΦΕΚ', field:'foundationFek.issue', sortable:true, filter:true, suppressSizeToFit:true, resizable:true},
-    { headerName:'Μονάδες', field:'organization_units', sortable:true, filter:true, suppressSizeToFit:true, resizable:true}
+        } },
+    { headerName:'Περιγραφή', field:'description' },
+    { headerName:'ΦΕΚ', field:'foundationFek.issue' },
+    { headerName:'Μονάδες', field:'organization_units' }
   ];
   
+  public defaultColDef: ColDef = {
+    sortable:true, 
+    filter:'agTextColumnFilter', 
+    suppressSizeToFit:true, 
+    resizable:true,
+    floatingFilter: true,
+  };
+
   constructor(
     private service: OrganizationsService,
     private repo: OrganizationsRepository

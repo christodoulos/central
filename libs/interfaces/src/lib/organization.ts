@@ -9,9 +9,9 @@ export interface Organization {
   organizationType: OrganizationType;
   description: string;
   status: string;
-  foundationDate: string | null;
-  terminationDate: string | null;
-  foundationFek: FoundationFek | Record<string, never>;
+  foundationDate: string 
+  terminationDate: string;
+  foundationFek: FoundationFek;
   organization_units: number;
 } 
 
