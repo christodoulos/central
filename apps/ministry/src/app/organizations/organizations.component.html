@@ -7,6 +7,10 @@
   [columnDefs]="colDefs"
   [defaultColDef]="defaultColDef"
   [pagination]="true"
+  [paginationPageSize]="50"
+  [overlayLoadingTemplate]="overlayLoadingTemplate"
+  [overlayNoRowsTemplate]="overlayNoRowsTemplate"
+  (gridReady)="onGridReady($event)"
 >
 
 

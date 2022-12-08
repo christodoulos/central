@@ -1,22 +1,35 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { NavigationEnd, Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
-import { filter } from 'rxjs';
+import { delay, filter } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { BackendService } from './backend.service';
 
+@UntilDestroy()
 @Component({
   selector: 'central-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'ministry';
   @ViewChild('left') sidenav!: MatSidenav;
 
-  constructor(private observer: BreakpointObserver, private router: Router) {}
+  constructor(
+    private observer: BreakpointObserver, 
+    private router: Router,
+    private backservice: BackendService,
+  ) {}
+
+  ngOnInit(): void {
+    this.backservice.getOrganizations().subscribe();
+  }
 
   ngAfterViewInit() {
-    this.observer.observe('(max-width: 800px)').subscribe((res) => {
+    this.observer.observe('(max-width: 800px)')
+    .pipe(delay(1), untilDestroyed(this))
+    .subscribe((res) => {
       if (res.matches) {
         this.sidenav.mode = 'over';
         this.sidenav.close();
@@ -27,7 +40,9 @@ export class AppComponent implements AfterViewInit {
     });
 
     this.router.events
-      .pipe(filter((e) => e instanceof NavigationEnd))
+      .pipe(
+        untilDestroyed(this),
+        filter((e) => e instanceof NavigationEnd))
       .subscribe(() => {
         if (this.sidenav.mode === 'over') {
           this.sidenav.close();

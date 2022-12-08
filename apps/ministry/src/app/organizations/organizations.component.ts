@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ColDef } from 'ag-grid-community';
+import { Component } from '@angular/core';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import 'ag-grid-enterprise';
 import { Observable } from 'rxjs';
 import { Organization } from '@central/interfaces';
-import { OrganizationsService } from './organizations.service';
 import { OrganizationsRepository } from '../state';
 
 @Component({
@@ -10,10 +10,11 @@ import { OrganizationsRepository } from '../state';
   templateUrl: './organizations.component.html',
   styleUrls: ['./organizations.component.css'],
 })
-export class OrganizationsComponent implements OnInit {
+export class OrganizationsComponent {
+  private gridApi!: GridApi<Organization>;
 
-  public rowData$!: Observable<Organization[]>; 
-  
+  public rowData$!: Observable<Organization[]>;
+
   public colDefs: ColDef[] = [
     { headerName:'Κωδικός', field:'code' },
     { headerName:'Φορέας', field:'preferredLabel' },
@@ -33,7 +34,13 @@ export class OrganizationsComponent implements OnInit {
           } 
         } },
     { headerName:'Περιγραφή', field:'description' },
-    { headerName:'ΦΕΚ', field:'foundationFek.issue' },
+    { headerName:'ΦΕΚ', 
+      field:'foundationFek.issue', 
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+        values: ['a','b','c'],
+      },
+    },
     { headerName:'Μονάδες', field:'organization_units' }
   ];
   
@@ -45,14 +52,26 @@ export class OrganizationsComponent implements OnInit {
     floatingFilter: true,
   };
 
+  public overlayLoadingTemplate =
+    '<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>';
+  
+  public overlayNoRowsTemplate =
+    '<span style="padding: 10px;">Loading data...</span>'
+    
   constructor(
-    private service: OrganizationsService,
-    private repo: OrganizationsRepository
+    private repo: OrganizationsRepository,
   ) {}
 
-  ngOnInit(): void {
-    // this.rowData$ = this.http.get<any[]>('https://www.ag-grid.com/example-assets/row-data.json')
-    this.service.getOrganizations().subscribe();
+  // ngOnInit(): void {
+  //   // this.rowData$ = this.http.get<any[]>('https://www.ag-grid.com/example-assets/row-data.json')
+  // }
+
+  onGridReady(params: GridReadyEvent<Organization>) {
+    this.gridApi = params.api;
+
     this.rowData$ = this.repo.organizations$;
+    if (!this.rowData$ || !this.rowData$) {
+      this.gridApi.hideOverlay();
+    }
   }
 }
