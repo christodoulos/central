@@ -24,8 +24,8 @@ export class OrganizationsComponent {
         valueGetter: params => {
           if (params.data.purpose) {
             const data = params.data.purpose; 
-            const purpose: any[] = [];
-            data.forEach(function(x: { description: any; }){
+            const purpose: string[] = [];
+            data.forEach(function(x: { description: string; }){
               purpose.push(x.description);
             });
              return purpose.join(',');
