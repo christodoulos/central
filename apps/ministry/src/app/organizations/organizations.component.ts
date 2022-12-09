@@ -14,7 +14,7 @@ export class OrganizationsComponent {
   private gridApi!: GridApi<Organization>;
 
   public rowData$!: Observable<Organization[]>;
-
+  
   public colDefs: ColDef[] = [
     { headerName:'Κωδικός', field:'code' },
     { headerName:'Φορέας', field:'preferredLabel' },
@@ -62,15 +62,11 @@ export class OrganizationsComponent {
     private repo: OrganizationsRepository,
   ) {}
 
-  // ngOnInit(): void {
-  //   // this.rowData$ = this.http.get<any[]>('https://www.ag-grid.com/example-assets/row-data.json')
-  // }
-
   onGridReady(params: GridReadyEvent<Organization>) {
     this.gridApi = params.api;
 
     this.rowData$ = this.repo.organizations$;
-    if (!this.rowData$ || !this.rowData$) {
+    if (!this.rowData$) {
       this.gridApi.hideOverlay();
     }
   }

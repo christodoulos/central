@@ -23,9 +23,7 @@ const store = createStore(
 @Injectable({ providedIn: 'root' })
 export class OrganizationsRepository {
   
-  constructor(private backendService: BackendService) {
-    this.setOrganizations();
-  }
+  constructor(private backendService: BackendService) {}
 
   organizations$ = store.pipe(
     selectAllEntities(),
