@@ -12,6 +12,7 @@ import {
   withRequestsStatus,
 } from '@ngneat/elf-requests';
 import { Organization } from '@central/interfaces';
+import { BackendService } from './../backend.service'; 
 
 const store = createStore(
   { name: 'organizations' },
@@ -22,6 +23,10 @@ const store = createStore(
 @Injectable({ providedIn: 'root' })
 export class OrganizationsRepository {
   
+  constructor(private backendService: BackendService) {
+    this.setOrganizations();
+  }
+
   organizations$ = store.pipe(
     selectAllEntities(),
   )
@@ -34,10 +39,16 @@ export class OrganizationsRepository {
       console.log(status);
   });
 
-  setOrganizations(organizations: Organization[]) {
-    store.update(
-      setEntities(organizations),
-      updateRequestStatus('organizations', 'success')
-    );
+  // setOrganizations(organizations: Organization[]) {
+  setOrganizations() {
+    this.backendService.getOrganizations().pipe(
+      this.trackOrganizationsRequestsStatus('organizations')
+    )
+    .subscribe((values) => {
+      store.update(
+        setEntities(values),
+        updateRequestStatus('organizations', 'success')
+      )
+    });
   }
 }
