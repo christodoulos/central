@@ -34,13 +34,7 @@ export class OrganizationsComponent {
           } 
         } },
     { headerName:'Περιγραφή', field:'description' },
-    { headerName:'ΦΕΚ', 
-      field:'foundationFek.issue', 
-      cellEditor: 'agSelectCellEditor',
-      cellEditorParams: {
-        values: ['a','b','c'],
-      },
-    },
+    { headerName:'ΦΕΚ', field:'foundationFek.issue' },
     { headerName:'Μονάδες', field:'organization_units' }
   ];
   

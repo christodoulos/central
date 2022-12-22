@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { join } from 'path';
 
 import { OrganizationsModule } from './organizations/organizations.module';
+import { OrganizationUnitsModule } from './organization-units/organization-units.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { OrganizationsModule } from './organizations/organizations.module';
       exclude: ['/api*'],
     }),
     MongooseModule.forRoot(process.env.MINISTRY_URI),
-    OrganizationsModule
+    OrganizationsModule,
+    OrganizationUnitsModule
   ],
   controllers: [AppController],
   providers: [AppService],

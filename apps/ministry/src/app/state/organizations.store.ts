@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { createStore } from '@ngneat/elf';
 import {
   setEntities,
+  selectAllEntitiesApply,
   selectAllEntities ,
   withEntities,
 } from '@ngneat/elf-entities';
@@ -27,7 +28,13 @@ export class OrganizationsRepository {
 
   organizations$ = store.pipe(
     selectAllEntities(),
-  )
+  );
+
+  organizations_units$ = store.pipe(
+    selectAllEntitiesApply({
+      filterEntity: (e) => e.organization_units>0,
+    })
+  );
       
   trackOrganizationsRequestsStatus = createRequestsStatusOperator(store);
   

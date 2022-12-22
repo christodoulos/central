@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Organization } from '@central/interfaces';
+import { Organization, OrganizationUnits } from '@central/interfaces';
 
 const AUTH_API = '/api/';
 
@@ -21,5 +21,11 @@ export class BackendService {
     console.log("backend service is here >>>");
     return this.http
       .get<Organization[]>(`${AUTH_API}organizations/all`, httpOptions)
+  }
+
+  getOrganizationUnits(){
+    console.log("backend service is here >>>");
+    return this.http
+      .get<OrganizationUnits[]>(`${AUTH_API}organization-units/all`, httpOptions)
   }
 }

@@ -7,15 +7,15 @@ import { Organization, OrganizationDocument } from './organizations.schema';
 export class OrganizationsService {
   constructor(
     @InjectModel('Organization')
-    private organizationModel: Model<OrganizationDocument>
+    private oModel: Model<OrganizationDocument>
   ) {}
 
   async get_all(): Promise<Organization[]> {
-    return this.organizationModel.find().exec();
+    return this.oModel.find().exec();
   }
 
   async get_by_id(id: string): Promise<Organization> {
-    return this.organizationModel.findById(id).exec();
+    return this.oModel.findById(id).exec();
   }
 
 }

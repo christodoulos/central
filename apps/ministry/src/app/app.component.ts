@@ -4,7 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { delay, filter } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { OrganizationsRepository } from './state'; 
+import { OrganizationsRepository, OrganizationUnitsRepository } from './state'; 
 
 @UntilDestroy()
 @Component({
@@ -19,7 +19,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private observer: BreakpointObserver, 
     private router: Router,
-    private repoOrganization: OrganizationsRepository
+    private repoOrganization: OrganizationsRepository,
+    private repoOrganizationsUnits: OrganizationUnitsRepository
   ) {}
 
   ngOnInit() {

@@ -2,15 +2,51 @@ import * as mongoose from 'mongoose';
 import { HydratedDocument } from 'mongoose';
 import uniqueValidator = require("mongoose-unique-validator");
 
-export type OrganizationDocument = HydratedDocument<typeof OrganizationSchema>;
+const unitSchema = new mongoose.Schema({ 
+  "code": {
+    "type": "String",
+    "unique": true
+  },
+  "organizationCode": {
+    "type": "String",
+  },
+  "preferredLabel": {
+    "type": "String"
+  },
+  "alternativeLabels": {
+    "type": [
+      "String"
+    ]
+  },
+  "purpose": {
+    "type": [
+      "Mixed"
+    ]
+  },
+  "unitType": {
+    "id": {
+      "type": "String"
+    },
+    "description": {
+      "type": "String"
+    }
+  },
+  "surervisorUnitCode": {
+    "code":{
+      "type": "String"
+    },
+    "preferredLabel":{
+      "type":"String"
+    }
+  }
+ });
 
-export type Organization = typeof OrganizationSchema;
+export type OrganizationUnitsDocument = HydratedDocument<typeof OrganizationUnitsSchema>;
 
-export const OrganizationSchema = new mongoose.Schema(
+export type OrganizationUnits = typeof OrganizationUnitsSchema;
+
+export const OrganizationUnitsSchema = new mongoose.Schema(
   {
-    // "id": {
-    //   "type":"ObjectId"
-    // },
     "code": {
       "type": "String",
       "unique": true
@@ -27,9 +63,6 @@ export const OrganizationSchema = new mongoose.Schema(
       "type": [
         "Mixed"
       ]
-    },
-    "identifier": {
-      "type": "String"
     },
     "subOrganizationOf": {
       "code": {
@@ -50,29 +83,7 @@ export const OrganizationSchema = new mongoose.Schema(
     "description": {
       "type": "String"
     },
-    "status": {
-      "type": "String"
-    },
-    "foundationDate": {
-      "type": "Date"
-    },
-    "terminationDate": {
-      "type": "Date"
-    },
-    "foundationFek": {
-      "year": {
-        "type": "Number"
-      },
-      "number": {
-        "type": "String"
-      },
-      "issue": {
-        "type": "String"
-      }
-    },
-    "organization_units": {
-      "type": "Number"
-    }
+    "units":[unitSchema]
   },
   { 
     id: true,
@@ -82,9 +93,9 @@ export const OrganizationSchema = new mongoose.Schema(
         delete ret._id
       }
     },
-    collection: 'organizations' 
+    collection: 'organization__units' 
   }
 );
 
 // Apply the uniqueValidator plugin to OrganizationUnitsSchema.
-OrganizationSchema.plugin( uniqueValidator, {message: 'Code must be unique'});
+OrganizationUnitsSchema.plugin( uniqueValidator, {message: 'Code must be unique'});

@@ -1,15 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import 'ag-grid-enterprise';
+import { Observable } from 'rxjs';
+import { Organization } from '@central/interfaces';
+import { OrganizationsRepository } from '../state';
 
 @Component({
   selector: 'central-organization-units',
   templateUrl: './organization-units.component.html',
   styleUrls: ['./organization-units.component.css']
 })
-export class OrganizationUnitsComponent implements OnInit {
+export class OrganizationUnitsComponent {
+  private gridApi!: GridApi<Organization>;
 
-  constructor() { }
+  public rowData$!: Observable<Organization[]>;
+  
+  public colDefs: ColDef[] = [
+    { headerName:'Κωδικός', field:'code' },
+    { headerName:'Φορέας', field:'preferredLabel' },
+    { headerName:'Εποπτεύοντας φορέας', field:'subOrganizationOf.preferredLabel' },
+    { headerName:'Τύπος φορέα', field:'organizationType.description' },
+    { headerName:'Λειτουργία', field:'purpose',  
+        valueGetter: params => {
+          if (params.data.purpose) {
+            const data = params.data.purpose; 
+            const purpose: string[] = [];
+            data.forEach(function(x: { description: string; }){
+              purpose.push(x.description);
+            });
+             return purpose.join(',');
+          } else {
+            return undefined;
+          } 
+        } },
+    { headerName:'Περιγραφή', field:'description' },
+    { headerName:'Μονάδες', field:'organization_units' }
+  ];
+  
+  public defaultColDef: ColDef = {
+    sortable:true, 
+    filter:'agTextColumnFilter', 
+    suppressSizeToFit:true, 
+    resizable:true,
+    floatingFilter: true,
+  };
 
-  ngOnInit(): void {
+  public overlayLoadingTemplate =
+    '<span class="ag-overlay-loading-center">Please wait while your rows are loading</span>';
+  
+  public overlayNoRowsTemplate =
+    '<span style="padding: 10px;">Loading data...</span>'
+    
+  constructor(
+    private repo: OrganizationsRepository,
+  ) {}
+
+  onGridReady(params: GridReadyEvent<Organization>) {
+    this.gridApi = params.api;
+
+    this.rowData$ = this.repo.organizations_units$;
+    if (!this.rowData$) {
+      this.gridApi.hideOverlay();
+    }
   }
-
 }
