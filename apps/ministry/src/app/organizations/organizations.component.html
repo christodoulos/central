@@ -4,14 +4,16 @@
   class="ag-theme-alpine"
   style="height:100%;width:100%"
   [rowData]="rowData$ | async"
-  [columnDefs]="colDefs"
+  [columnDefs]="columnDefs"
   [defaultColDef]="defaultColDef"
   [pagination]="true"
   [paginationPageSize]="50"
   [overlayLoadingTemplate]="overlayLoadingTemplate"
   [overlayNoRowsTemplate]="overlayNoRowsTemplate"
   (gridReady)="onGridReady($event)"
+  rowSelection="multiple"
+  (selectionChanged)="onSelectionChanged($event)"
+  [isRowSelectable]="isRowSelectable" 
+  (firstDataRendered)="onFirstDataRendered($event)"
 >
-
-
 </ag-grid-angular>

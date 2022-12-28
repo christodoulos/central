@@ -11,10 +11,10 @@ export class OrganizationUnitsController {
     return await this.service.get_all();
   }
 
-  @Get(':id')
-  async by_id(@Param() params: { id: string }) {
-    console.log("Organization Units by id");
-    const id = params.id;
-    return await this.service.get_by_id(id);
+  @Get(':code')
+  async by_code(@Param() params: { code: string }) {
+    console.log("Organization Units by Code");
+    const codes = params.code.split('-');
+    return await this.service.get_by_code(codes);
   }
 }

@@ -18,14 +18,21 @@ export class BackendService {
   ) { }
 
   getOrganizations(){
-    console.log("backend service is here >>>");
+    console.log("Get Organizations");
     return this.http
       .get<Organization[]>(`${AUTH_API}organizations/all`, httpOptions)
   }
 
   getOrganizationUnits(){
-    console.log("backend service is here >>>");
+    console.log("Get Organizations Units");
     return this.http
       .get<OrganizationUnits[]>(`${AUTH_API}organization-units/all`, httpOptions)
+  }
+
+  getOrganizationUnitsByCode(codes: Array<string>){
+    console.log("Get Organizations Units By Code");
+    const code = codes.join('-');
+    return this.http
+      .get<OrganizationUnits[]>(`${AUTH_API}organization-units/${code}`, httpOptions)
   }
 }

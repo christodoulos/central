@@ -49,4 +49,16 @@ export class OrganizationUnitsRepository {
       )
     });
   }
+
+  setOrganizationUnitsByCode(codes: Array<string>) {
+    this.backendService.getOrganizationUnitsByCode(codes).pipe(
+      this.trackOrganizationUnitsRequestsStatus('organization-units')
+    )
+    .subscribe((values) => {
+      store.update(
+        setEntities(values),
+        updateRequestStatus('organization-units', 'success')
+      )
+    });
+  }
 }

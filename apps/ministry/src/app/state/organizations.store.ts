@@ -30,11 +30,11 @@ export class OrganizationsRepository {
     selectAllEntities(),
   );
 
-  organizations_units$ = store.pipe(
-    selectAllEntitiesApply({
-      filterEntity: (e) => e.organization_units>0,
-    })
-  );
+  // organizations_units$ = store.pipe(
+  //   selectAllEntitiesApply({
+  //     filterEntity: (e) => e.organization_units>0,
+  //   })
+  // );
       
   trackOrganizationsRequestsStatus = createRequestsStatusOperator(store);
   

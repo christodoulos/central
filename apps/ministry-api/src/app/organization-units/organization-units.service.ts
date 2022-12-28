@@ -14,7 +14,7 @@ export class OrganizationUnitsService {
     return this.ouModel.find().exec();
   }
 
-  async get_by_id(id: string): Promise<OrganizationUnits> {
-    return this.ouModel.findById(id).exec();
+  async get_by_code(codes: Array<string>): Promise<OrganizationUnits[]> {
+    return this.ouModel.find({"code": { $in: codes}}).exec();
   }
 }

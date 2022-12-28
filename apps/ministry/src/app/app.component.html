@@ -27,7 +27,7 @@
       <h4 matSubheader>Μενού επιλογών</h4>
       <a mat-list-item routerLink="/"><mat-icon>home</mat-icon> Αρχική</a>
       <a mat-list-item routerLink="/organizations">Φορείς</a>
-      <a mat-list-item routerLink="/organization-units">Μονάδες</a>
+      <a mat-list-item routerLink="/organization-units" *ngIf="showUnits">Μονάδες</a>
     </mat-nav-list>
     <mat-divider></mat-divider>
   </mat-sidenav>

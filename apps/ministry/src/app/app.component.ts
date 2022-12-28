@@ -4,7 +4,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { delay, filter } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { OrganizationsRepository, OrganizationUnitsRepository } from './state'; 
+import { OrganizationsRepository } from './state'; 
+import { OrganizationUnitsService } from "./organization-units/organization-units.service";
 
 @UntilDestroy()
 @Component({
@@ -16,15 +17,25 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'ministry';
   @ViewChild('left') sidenav!: MatSidenav;
 
+  public showUnits = false;
+
   constructor(
     private observer: BreakpointObserver, 
     private router: Router,
     private repoOrganization: OrganizationsRepository,
-    private repoOrganizationsUnits: OrganizationUnitsRepository
+    private ouService: OrganizationUnitsService,
   ) {}
 
   ngOnInit() {
     this.repoOrganization.setOrganizations();
+    this.ouService.getOUCodes()
+      .subscribe(data=>{
+        if (data.length>0) {
+          console.log("app>>>",data)
+          this.showUnits = true;
+        } else 
+          this.showUnits = false;
+      })
   }
 
   ngAfterViewInit() {
