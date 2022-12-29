@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColDef, GridApi, GridReadyEvent, SelectionChangedEvent, IsRowSelectable, RowNode, FirstDataRenderedEvent } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent, SelectionChangedEvent, IsRowSelectable, RowNode, CheckboxSelectionCallbackParams } from 'ag-grid-community';
 import 'ag-grid-enterprise';
 import { Observable } from 'rxjs';
 import { Organization } from '@central/interfaces';
@@ -17,7 +17,22 @@ export class OrganizationsComponent {
   public rowData$!: Observable<Organization[]>;
   
   public columnDefs: ColDef[] = [
-    { headerName:'Κωδικός', field:'code', checkboxSelection: true },
+    {
+      headerName: '',
+      field: 'actioncell',
+      filter: false,
+      width: 20,
+      resizable: false,
+      headerCheckboxSelection: false,
+      checkboxSelection: true,
+      cellRenderer: (params: any) => {
+        this.oService.getOUCode()
+        .subscribe(data=>{
+          params.node.setSelected(data.includes(params.node.data.code))
+        });
+      }
+    },
+    { headerName:'Κωδικός', field:'code' },
     { headerName:'Φορέας', field:'preferredLabel' },
     { headerName:'Εποπτεύοντας φορέας', field:'subOrganizationOf.preferredLabel' },
     { headerName:'Τύπος φορέα', field:'organizationType.description' },
@@ -64,13 +79,7 @@ export class OrganizationsComponent {
     this.rowData$ = this.repo.organizations$;
     if (!this.rowData$) {
       this.gridApi.hideOverlay();
-    }
-  }
-
-  getSelectedRowData() {
-    const selectedData = this.gridApi.getSelectedRows();
-    console.log(`Selected Data:\n${JSON.stringify(selectedData)}`);
-    return selectedData;
+    } 
   }
 
   onSelectionChanged(event: SelectionChangedEvent) {
@@ -81,14 +90,4 @@ export class OrganizationsComponent {
   isRowSelectable: IsRowSelectable = (rowNode: RowNode) => {
     return rowNode.data ? rowNode.data.organization_units >=1 : true;
   };
-
-  onFirstDataRendered(params: FirstDataRenderedEvent<Organization>) {
-    this.oService.getOUCode()
-      .subscribe(data=>{
-        params.api.forEachNode((node) =>
-          node.setSelected(!!node.data && data.includes(node.data.code))
-        );
-      });
-  }
-  
 }

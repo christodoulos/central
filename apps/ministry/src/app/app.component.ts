@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { NavigationEnd, Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
-import { delay, filter } from 'rxjs';
+import { Subscription, delay, filter } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { OrganizationsRepository } from './state'; 
 import { OrganizationUnitsService } from "./organization-units/organization-units.service";
@@ -13,11 +13,13 @@ import { OrganizationUnitsService } from "./organization-units/organization-unit
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'ministry';
   @ViewChild('left') sidenav!: MatSidenav;
 
   public showUnits = false;
+
+  subscription: Subscription= new Subscription();
 
   constructor(
     private observer: BreakpointObserver, 
@@ -28,10 +30,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.repoOrganization.setOrganizations();
-    this.ouService.getOUCodes()
+    this.subscription = this.ouService.getOUCodes()
       .subscribe(data=>{
         if (data.length>0) {
-          console.log("app>>>",data)
           this.showUnits = true;
         } else 
           this.showUnits = false;
@@ -60,5 +61,9 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.sidenav.close();
         }
       });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

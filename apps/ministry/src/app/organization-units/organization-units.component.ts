@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import 'ag-grid-enterprise';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { OrganizationUnits } from '@central/interfaces';
 import { OrganizationUnitsRepository } from '../state';
 import { OrganizationUnitsService } from './organization-units.service';
@@ -11,7 +11,7 @@ import { OrganizationUnitsService } from './organization-units.service';
   templateUrl: './organization-units.component.html',
   styleUrls: ['./organization-units.component.css']
 })
-export class OrganizationUnitsComponent implements OnInit {
+export class OrganizationUnitsComponent implements OnInit, OnDestroy  {
   private gridApi!: GridApi<OrganizationUnits>;
 
   public rowData$!: Observable<OrganizationUnits[]>;
@@ -51,28 +51,35 @@ export class OrganizationUnitsComponent implements OnInit {
   public overlayNoRowsTemplate =
     '<span style="padding: 10px;">Loading data...</span>'
   
+  subscription: Subscription = new Subscription();
+
   constructor(
     private repo: OrganizationUnitsRepository,
     private ouService: OrganizationUnitsService,
   ) {}
 
   ngOnInit() {
-    this.ouService
+    this.subscription = this.ouService
       .getOUCodes()
       .subscribe((data) => {
-        console.log("Subscription got", data);
+        // console.log("Subscription got", data);
         this.repo.setOrganizationUnitsByCode(data);
       });
   }
 
   onGridReady(params: GridReadyEvent<OrganizationUnits>) {
     this.gridApi = params.api;
-    console.log("OUAAAAAAA");
+    // console.log(">>> onGridReady");
     
     this.rowData$ = this.repo.organizations_units$;
     if (!this.rowData$) {
       this.gridApi.hideOverlay();
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    // this.gridApi.destroy();
   }
 
 }
